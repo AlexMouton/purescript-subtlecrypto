@@ -1,5 +1,6 @@
 module Crypto.Subtle.Key.Import
   ( importKey
+  , importKeyJwkRsa, importKeyJwkEc, importKeyJwkRsaPrivate, importKeyJwkEcPrivate, importKeyJwkSymmetric
   , ImportAlgorithm, rsa, ec, hmac, aes
   ) where
 
@@ -10,7 +11,7 @@ import Crypto.Subtle.Constants.RSA (RSAAlgorithm)
 import Crypto.Subtle.Hash (HashingFunction)
 import Crypto.Subtle.Key.Types (CryptoKey, CryptoKeyUsage, ExternalFormat, errorFromDOMException)
 import Data.ArrayBuffer.Types (ArrayBuffer)
-import Data.Function.Uncurried (Fn5, runFn5)
+import Data.Function.Uncurried (Fn4, Fn5, runFn4, runFn5)
 import Effect.Aff (Aff)
 import Unsafe.Coerce (unsafeCoerce)
 
@@ -28,6 +29,43 @@ importKey :: ExternalFormat
           -> Aff CryptoKey
 importKey f x a e u = toAff' errorFromDOMException (runFn5 importKeyImpl f x a e u)
 
+foreign import importKeyJwkImpl :: forall r. Fn4 { | r} ImportAlgorithm Boolean (Array CryptoKeyUsage) (Promise CryptoKey)
+
+importKeyJwkRsa :: forall r. { kty :: String, n :: String, e :: String | r } -- ^ JWK RSA key
+                 -> ImportAlgorithm
+                 -> Boolean -- ^ Extractable
+                 -> Array CryptoKeyUsage
+                 -> Aff CryptoKey
+importKeyJwkRsa x a e u = toAff' errorFromDOMException (runFn4 importKeyJwkImpl x a e u)
+
+importKeyJwkRsaPrivate :: forall r. { kty :: String, n :: String, e :: String, d :: String | r } -- ^ JWK RSA private key
+                        -> ImportAlgorithm
+                        -> Boolean -- ^ Extractable
+                        -> Array CryptoKeyUsage
+                        -> Aff CryptoKey
+importKeyJwkRsaPrivate x a e u = toAff' errorFromDOMException (runFn4 importKeyJwkImpl x a e u)
+
+
+importKeyJwkEc :: forall r. { kty :: String, crv :: String, x :: String, y :: String | r } -- ^ JWK EC key
+                -> ImportAlgorithm
+                -> Boolean -- ^ Extractable
+                -> Array CryptoKeyUsage
+                -> Aff CryptoKey
+importKeyJwkEc x a e u = toAff' errorFromDOMException (runFn4 importKeyJwkImpl x a e u)
+
+importKeyJwkEcPrivate :: forall r. { kty :: String, crv :: String, x :: String, y :: String, d :: String | r } -- ^ JWK EC private key
+                       -> ImportAlgorithm
+                       -> Boolean -- ^ Extractable
+                       -> Array CryptoKeyUsage
+                       -> Aff CryptoKey
+importKeyJwkEcPrivate x a e u = toAff' errorFromDOMException (runFn4 importKeyJwkImpl x a e u)
+
+importKeyJwkSymmetric :: forall r. { kty :: String, k :: String | r } -- ^ JWK symmetric key (HMAC/AES)
+                      -> ImportAlgorithm
+                      -> Boolean -- ^ Extractable
+                      -> Array CryptoKeyUsage
+                      -> Aff CryptoKey
+importKeyJwkSymmetric x a e u = toAff' errorFromDOMException (runFn4 importKeyJwkImpl x a e u)
 
 foreign import data ImportAlgorithm :: Type
 
