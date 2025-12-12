@@ -1,0 +1,21 @@
+package:
+  dependencies:
+    - aff
+    - aff-promise
+    - arraybuffer-types
+    - console
+    - effect
+    - either
+    - exceptions
+    - foreign
+    - functions
+    - maybe
+    - prelude
+    - transformers
+    - tuples
+    - unsafe-coerce
+  name: subtlecrypto
+workspace:
+  extraPackages: {}
+  packageSet:
+    url: https://raw.githubusercontent.com/purescript/package-sets/psc-0.15.0-20220516/packages.json

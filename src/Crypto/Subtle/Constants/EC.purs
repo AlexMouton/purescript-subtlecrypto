@@ -27,3 +27,6 @@ p384 :: ECCurve
 p384 = ECCurve "P-384"
 p521 :: ECCurve
 p521 = ECCurve "P-521"
+
+p25519 :: ECCurve
+p25519 = ECCurve "25519"
