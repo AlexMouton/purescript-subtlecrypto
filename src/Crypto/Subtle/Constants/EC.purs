@@ -1,6 +1,6 @@
 module Crypto.Subtle.Constants.EC
   ( ECAlgorithm, ecdsa, ecdh
-  , ECCurve, p256, p384, p521
+  , ECCurve, p256, p384, p521, p25519
   ) where
 
 import Prelude (class Eq)
